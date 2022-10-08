@@ -49,7 +49,7 @@ export const Form = styled.form`
   label {
     align-self: flex-start;
     color: var(--gray0);
-    margin-left: 20px;
+    margin-left: 5%;
     font-size: var(--fontS3);
   }
 
