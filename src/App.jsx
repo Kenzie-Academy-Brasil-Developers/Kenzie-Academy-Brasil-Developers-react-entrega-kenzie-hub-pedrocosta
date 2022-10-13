@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext,} from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import DashBoard from "./pages/DashBoard";
@@ -6,9 +6,10 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage/idex";
 import GlobalStyle from "./styles/global";
 import "react-toastify/dist/ReactToastify.css";
+import { UserContext } from "./pages/contexts/userContext";
 
 function App() {
-  const [user, setUser] = useState([]);
+  const {user,setUser} = useContext(UserContext)
 
   return (
     <>

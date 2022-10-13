@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import api from "../../services/api";
 import {
   ButtonNegative,
   ButtonRegister,
@@ -11,13 +10,12 @@ import {
 } from "./styles";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { useState } from "react";
+import { useContext} from "react";
+import { UserContext } from "../contexts/userContext";
 
 const RegisterPage = () => {
-  const [notification, setNotification] = useState(false);
-  const navigate = useNavigate();
+  const {registerUser,notice,navigate} = useContext(UserContext)
+
   const formSchema = yup.object().shape({
     name: yup.string().required("Nome obrigatório"),
     email: yup.string().required("Email obrigatório").email(),
@@ -46,44 +44,20 @@ const RegisterPage = () => {
   } = useForm({
     resolver: yupResolver(formSchema),
   });
-  const onSubmit = (data) => {
-    api
-      .post("/users", data)
-
-      .then((resp) => {
-        setTimeout(() => {
-          navigate("/login");
-        }, 1500);
-        toast("Cadastro  feito com Sucesso", {
-          autoClose: 1000,
-        });
-      })
-      .catch((err) => {
-        const Warning = toast("falha ao cadastrar", {
-          autoClose: 1000,
-        });
-        if (Warning) {
-          setNotification(true);
-        }
-
-        setTimeout(() => {
-          setNotification(false);
-        }, 1600);
-      });
-  };
+  
 
   return (
     <Sec>
       <Container>
         <Title>Kenzie Hub</Title>
-        {!notification ? (
+        {!notice ? (
           <GoLogin onClick={() => navigate("/login")}>Login</GoLogin>
         ) : (
           <GoLogin>Login</GoLogin>
         )}
       </Container>
 
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(registerUser)}>
         <div>
           <h3>Crie sua conta</h3>
         </div>
@@ -147,7 +121,7 @@ const RegisterPage = () => {
           <option value="Modulo 6">Módulo 6</option>
         </select>
 
-        {!notification ? (
+        {!notice ? (
           <ButtonRegister type="submit">Cadastrar</ButtonRegister>
         ) : (
           <ButtonNegative type="button">Cadastrar</ButtonNegative>
