@@ -4,7 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import Providers from './pages/contexts/providers';
+import Providers from './contexts/Providers';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,6 +14,8 @@ root.render(
   <Providers>
   <App />
   </Providers>
+
+  
   </BrowserRouter>
   </React.StrictMode>
 );

@@ -10,6 +10,9 @@ box-sizing: border-box;
 }
 body {
     background-color: var(--gray4);
+    position: absolute;
+    height: 100%;
+    width: 100%;
 
 }
 

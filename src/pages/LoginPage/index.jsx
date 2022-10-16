@@ -1,7 +1,7 @@
-import {  useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useContext} from "react";
+
 import {
   ButtonLogin,
   ButtonNegative,
@@ -10,11 +10,12 @@ import {
   Sec,
   Title,
 } from "./style";
-import { UserContext } from "../contexts/userContext";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
 
 const LoginPage = () => {
-  const {loading,notification,onSubmit,navigate} = useContext(UserContext)
-  
+  const { loading, notification, onSubmit, navigate } = useContext(UserContext);
+
   const formSchema = yup.object().shape({
     email: yup.string().required("Nome obrigatorio").email(),
     password: yup.string().required("Senha obrigatória"),
@@ -28,9 +29,6 @@ const LoginPage = () => {
     resolver: yupResolver(formSchema),
   });
 
-
-
-
   return (
     <Sec>
       <Title>Kenzie Hub</Title>
@@ -38,15 +36,17 @@ const LoginPage = () => {
         <Form onSubmit={handleSubmit(onSubmit)}>
           <h3>Login</h3>
 
-          <label htmlFor="">Email</label>
+          <label htmlFor="email">Email</label>
           <input
+            id="email"
             type="email"
             {...register("email")}
             placeholder="Digite aqui seu email"
           />
           <p>{errors.email?.message}</p>
-          <label htmlFor="">Senha</label>
+          <label htmlFor="password">Senha</label>
           <input
+          id="password"
             type="password"
             placeholder="Digite aqui sua senha"
             {...register("password")}

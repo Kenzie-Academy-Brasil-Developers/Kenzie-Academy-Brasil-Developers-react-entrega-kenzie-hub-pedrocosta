@@ -10,11 +10,11 @@ import {
 } from "./styles";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useContext} from "react";
-import { UserContext } from "../contexts/userContext";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
 
 const RegisterPage = () => {
-  const {registerUser,notice,navigate} = useContext(UserContext)
+  const { registerUser, notice, navigate } = useContext(UserContext);
 
   const formSchema = yup.object().shape({
     name: yup.string().required("Nome obrigatório"),
@@ -44,7 +44,6 @@ const RegisterPage = () => {
   } = useForm({
     resolver: yupResolver(formSchema),
   });
-  
 
   return (
     <Sec>
