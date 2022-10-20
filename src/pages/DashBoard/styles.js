@@ -12,6 +12,11 @@ position: absolute;
 `
 
 
+export const LoginMessage = styled.h2`
+color: var(--wht);
+`
+
+
 export const Form = styled.form`
   display: flex;
   align-items: center;

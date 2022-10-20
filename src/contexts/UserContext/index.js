@@ -1,50 +1,43 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../services/api";
+import { TechContext } from "../TechContext";
 
 export const UserContext = createContext({});
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState([]);
+  const [authenticatedUser, setauthenticatedUser] = useState(false);
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState(false);
   const [notice, setNotice] = useState(false);
   const navigate = useNavigate();
+  const { getTech } = useContext(TechContext);
 
+  useEffect(() => {
+    const token = localStorage.getItem("Token");
+    if (token) {
+      api.defaults.headers.authorization = `Bearer ${token}`;
+      api
+        .get("/profile")
+        .then((response) => {
+          setUser(response.data);
 
-  // useEffect(() => {
-  //   async function loadUser() {
+          setauthenticatedUser(true);
+        })
+        .catch((err) => {
+          console.log(err);
+          navigate("/login");
+        });
+    }
+  }, []);
 
-  //     const token = localStorage.getItem("Token")
-  //     if(token) {
-  //         try {
-  //           api.defaults.headers.authorization = `Bearer ${token}`;
-  //             const getUserinfo = await api.get("/profile")
-  //             setUser(getUserinfo)
-              
-  //             // setLoading(true)
-            
-  //         } catch (error) {
-  //             console.log(error)
-  //         }
-  //     } 
-
-  //   }
-  //  loadUser()
-  //  console.log(user)
-  //   }, [])
-
-
-
-
-  const getUser = () => {
-    api
-      .get("/profile")
-      .then((response) =>
-        setUser(response.data))
-      .catch((err) => console.log(err))
-  };
+  useEffect(() => {
+    if (authenticatedUser === true) {
+      navigate("/dashboard");
+    }
+  }, [authenticatedUser]);
 
   const registerUser = (data) => {
     api
@@ -59,6 +52,7 @@ export const UserProvider = ({ children }) => {
         });
       })
       .catch((err) => {
+        console.log(err.response.data);
         const Warning = toast("falha ao cadastrar", {
           autoClose: 1000,
         });
@@ -81,13 +75,25 @@ export const UserProvider = ({ children }) => {
           autoClose: 1000,
           type: "success",
         });
-
-        navigate("/dashboard");
-
-        setUser(resp.data.user);
         localStorage.setItem("Token", resp.data.token);
         const token = localStorage.getItem("Token");
         api.defaults.headers.authorization = `Bearer ${token}`;
+
+        if (token) {
+          api
+            .get("/profile")
+            .then((response) => {
+              setauthenticatedUser(true);
+              setUser(response.data);
+              navigate("/dashboard");
+              getTech();
+            })
+            .catch((err) => {
+              console.log(err);
+              navigate("/login");
+            });
+        }
+
         setLoading(false);
       })
       .catch((err) => {
@@ -120,7 +126,8 @@ export const UserProvider = ({ children }) => {
         navigate,
         registerUser,
         onSubmit,
-        getUser,
+        authenticatedUser,
+        setauthenticatedUser,
       }}
     >
       {children}

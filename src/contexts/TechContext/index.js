@@ -1,46 +1,49 @@
 import { createContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import api from "../../services/api";
 
 export const TechContext = createContext({});
 
- export  const TechProvider = ({ children }) => {
+export const TechProvider = ({ children }) => {
   const [techModal, setTechModal] = useState(false);
   const [technology, setTechnology] = useState([]);
-  //   const [technologyId,setTechnologyId] = useState();
-
+  const [loading, setLoading] = useState(false)
   const createTech = (data) => {
     api
       .post("/users/techs", data)
       .then((response) => {
+        setLoading(true);
         setTechModal(false);
         setTechnology([...technology, response.data]);
+        setLoading(false);
       })
       .catch((err) => console.log(err));
   };
 
-  const getTech = () => {
+  const deleteTech = (data) => {
     api
-      .get("/profile")
-      .then((response) => setTechnology([...response.data.techs]))
-
-      .catch((err) => err);
-  };
-
-   const deleteTech = (data) => {
-   api
+   
       .delete(`/users/techs/${data.id}`)
       .then((response) => {
+        setLoading(true);
+        const filteredTechnology = technology.filter(
+          (element) => element !== data
+        );
+        setTechnology([...filteredTechnology]);
         
-       const filteredTechnology =  technology.filter(element => element !== data)
-          setTechnology([...filteredTechnology])
-       
-        
-        
-        
+          setLoading(false);
+         
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        
+        console.log(err)
+        toast("falha ao apagar tecnologia", {
+          autoClose: 1000,
+          
+        });
       
-      
+        
+      });
   };
 
   return (
@@ -50,8 +53,9 @@ export const TechContext = createContext({});
         setTechModal,
         createTech,
         technology,
-        getTech,
         deleteTech,
+        setTechnology,
+        loading
       }}
     >
       {children}

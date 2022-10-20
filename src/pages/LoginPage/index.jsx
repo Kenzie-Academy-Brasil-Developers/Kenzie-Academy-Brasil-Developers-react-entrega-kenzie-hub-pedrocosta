@@ -31,7 +31,9 @@ const LoginPage = () => {
 
   return (
     <Sec>
-      <Title>Kenzie Hub</Title>
+      <Title>
+        Kenzie Hub
+      </Title>
       {!loading ? (
         <Form onSubmit={handleSubmit(onSubmit)}>
           <h3>Login</h3>
@@ -46,7 +48,7 @@ const LoginPage = () => {
           <p>{errors.email?.message}</p>
           <label htmlFor="password">Senha</label>
           <input
-          id="password"
+            id="password"
             type="password"
             placeholder="Digite aqui sua senha"
             {...register("password")}
