@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../services/api";
-import { TechContext } from "../TechContext";
+
 
 export const UserContext = createContext({});
 
@@ -13,7 +13,7 @@ export const UserProvider = ({ children }) => {
   const [notification, setNotification] = useState(false);
   const [notice, setNotice] = useState(false);
   const navigate = useNavigate();
-  const { getTech } = useContext(TechContext);
+
 
   useEffect(() => {
     const token = localStorage.getItem("Token");
@@ -35,11 +35,13 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     if (authenticatedUser === true) {
-      navigate("/dashboard");
-    }
+      navigate("/dashboard")
+    } 
+    
   }, [authenticatedUser]);
 
   const registerUser = (data) => {
+    console.log(data);
     api
       .post("/users", data)
 
@@ -86,7 +88,6 @@ export const UserProvider = ({ children }) => {
               setauthenticatedUser(true);
               setUser(response.data);
               navigate("/dashboard");
-              getTech();
             })
             .catch((err) => {
               console.log(err);

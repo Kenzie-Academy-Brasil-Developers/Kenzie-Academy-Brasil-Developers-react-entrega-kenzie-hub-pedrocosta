@@ -10,11 +10,15 @@ import {
   Sec,
   Title,
 } from "./style";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../../contexts/UserContext";
 
 const LoginPage = () => {
   const { loading, notification, onSubmit, navigate } = useContext(UserContext);
+
+
+
+
 
   const formSchema = yup.object().shape({
     email: yup.string().required("Nome obrigatorio").email(),
@@ -31,7 +35,7 @@ const LoginPage = () => {
 
   return (
     <Sec>
-      <Title>
+      <Title onClick={() => localStorage.setItem("Token" , "habudsdd")}>
         Kenzie Hub
       </Title>
       {!loading ? (
