@@ -10,7 +10,7 @@ import {
   Sec,
   Title,
 } from "./style";
-import { useContext, useEffect } from "react";
+import { useContext} from "react";
 import { UserContext } from "../../contexts/UserContext";
 
 const LoginPage = () => {
@@ -35,7 +35,7 @@ const LoginPage = () => {
 
   return (
     <Sec>
-      <Title onClick={() => localStorage.setItem("Token" , "habudsdd")}>
+      <Title>
         Kenzie Hub
       </Title>
       {!loading ? (
