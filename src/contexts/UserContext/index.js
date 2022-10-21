@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../services/api";
 
-
 export const UserContext = createContext({});
 
 export const UserProvider = ({ children }) => {
@@ -14,17 +13,18 @@ export const UserProvider = ({ children }) => {
   const [notice, setNotice] = useState(false);
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const token = localStorage.getItem("Token");
-    if (token) {
-      api.defaults.headers.authorization = `Bearer ${token}`;
+
+    if (!token) {
+      navigate("/login");
+    } else {
+      api.defaults.headers.Authorization = `Bearer ${token}`;
+      setauthenticatedUser(true);
       api
         .get("/profile")
         .then((response) => {
           setUser(response.data);
-
-          setauthenticatedUser(true);
         })
         .catch((err) => {
           console.log(err);
@@ -35,9 +35,8 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     if (authenticatedUser === true) {
-      navigate("/dashboard")
-    } 
-    
+      navigate("/dashboard");
+    }
   }, [authenticatedUser]);
 
   const registerUser = (data) => {
@@ -79,7 +78,7 @@ export const UserProvider = ({ children }) => {
         });
         localStorage.setItem("Token", resp.data.token);
         const token = localStorage.getItem("Token");
-        api.defaults.headers.authorization = `Bearer ${token}`;
+        api.defaults.headers.Authorization = `Bearer ${token}`;
 
         if (token) {
           api

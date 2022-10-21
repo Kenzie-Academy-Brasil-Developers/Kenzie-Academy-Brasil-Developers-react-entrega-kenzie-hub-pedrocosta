@@ -17,7 +17,6 @@ import {
 } from "./styles";
 import trashCan from "../../assets/Vector.png";
 import api from "../../services/api";
-import { Link } from "react-router-dom";
 
 const DashBoard = () => {
   const formSchema = yup.object().shape({
@@ -37,6 +36,7 @@ const DashBoard = () => {
   useEffect(() => {
     const token = localStorage.getItem("Token");
     if (token) {
+      api.defaults.headers.Authorization = `Bearer ${token}`;
       api
         .get("/profile")
         .then((response) => setTechnology(response.data.techs))
@@ -70,6 +70,7 @@ const DashBoard = () => {
       </Header>
       {!loading ? (
         <Sec>
+          
           <Container>
             <h2>Ola, {user.name}</h2>
             <p>{user.course_module}</p>
