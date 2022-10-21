@@ -140,6 +140,8 @@ export const Sec = styled.section`
   border-bottom: solid var(--gray1) 1px;
 `;
 
+
+
 export const Container = styled.div`
   width: 100%;
   height: 70px;

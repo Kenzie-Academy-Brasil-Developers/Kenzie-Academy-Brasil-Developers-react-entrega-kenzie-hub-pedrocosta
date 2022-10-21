@@ -17,6 +17,7 @@ import {
 } from "./styles";
 import trashCan from "../../assets/Vector.png";
 import api from "../../services/api";
+import { Link } from "react-router-dom";
 
 const DashBoard = () => {
   const formSchema = yup.object().shape({
