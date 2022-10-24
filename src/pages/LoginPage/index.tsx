@@ -10,15 +10,16 @@ import {
   Sec,
   Title,
 } from "./style";
-import { useContext} from "react";
+import { useContext } from "react";
 import { UserContext } from "../../contexts/UserContext";
+
+interface iSubmit {
+  email: string;
+  password: string;
+}
 
 const LoginPage = () => {
   const { loading, notification, onSubmit, navigate } = useContext(UserContext);
-
-
-
-
 
   const formSchema = yup.object().shape({
     email: yup.string().required("Nome obrigatorio").email(),
@@ -29,15 +30,13 @@ const LoginPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<iSubmit>({
     resolver: yupResolver(formSchema),
   });
 
   return (
     <Sec>
-      <Title>
-        Kenzie Hub
-      </Title>
+      <Title>Kenzie Hub</Title>
       {!loading ? (
         <Form onSubmit={handleSubmit(onSubmit)}>
           <h3>Login</h3>

@@ -13,6 +13,16 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useContext } from "react";
 import { UserContext } from "../../contexts/UserContext";
 
+interface iRegisterUser {
+  name: string;
+  email: string;
+  password: string;
+  bio: string;
+  contact: string;
+  course_module: string;
+  passwordConfirmation: string;
+}
+
 const RegisterPage = () => {
   const { registerUser, notice, navigate } = useContext(UserContext);
 
@@ -41,7 +51,7 @@ const RegisterPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<iRegisterUser>({
     resolver: yupResolver(formSchema),
   });
 
@@ -111,7 +121,7 @@ const RegisterPage = () => {
 
         <p>{errors.contact?.message}</p>
         <label htmlFor="course_module">Seu Módulo:</label>
-        <select name="" id="course_module" {...register("course_module")}>
+        <select   id="course_module" {...register("course_module")}>
           <option value="Modulo 1">Módulo 1</option>
           <option value="Modulo 2">Módulo 2</option>
           <option value="Modulo 3">Módulo 3</option>

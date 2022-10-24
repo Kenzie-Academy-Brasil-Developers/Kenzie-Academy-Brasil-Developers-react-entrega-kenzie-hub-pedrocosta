@@ -15,8 +15,16 @@ import {
   TechSection,
   Title,
 } from "./styles";
-import trashCan from "../../assets/Vector.png";
+import trashCan from "../../assets/Vector.png"
 import api from "../../services/api";
+
+
+interface iCreateTech {
+  title: string
+  status:string
+}
+
+
 
 const DashBoard = () => {
   const formSchema = yup.object().shape({
@@ -44,13 +52,14 @@ const DashBoard = () => {
     } else {
       navigate("/login");
     }
+    
   }, [setTechnology]);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<iCreateTech>({
     resolver: yupResolver(formSchema),
   });
 
@@ -72,8 +81,8 @@ const DashBoard = () => {
         <Sec>
           
           <Container>
-            <h2>Ola, {user.name}</h2>
-            <p>{user.course_module}</p>
+            <h2>Ola, {user!.name}</h2>
+            <p>{user!.course_module}</p>
           </Container>
           <Container>
             <h3>Tecnologias</h3>
@@ -89,9 +98,14 @@ const DashBoard = () => {
                 <h4>{element.title}</h4>
                 <div>
                   <h4>{element.status}</h4>
-                  <button onClick={() => deleteTech(element)}>
+                  <button onClick={() => {
+                    
+                    
+                          console.log(element)                    
+                    deleteTech(element)
+                    }}>
                     {" "}
-                    <img src={trashCan} />
+                    <img src={trashCan} alt="local da imagem"/>
                   </button>
                 </div>
               </TechContainer>
@@ -113,7 +127,7 @@ const DashBoard = () => {
                 />
                 <p>{errors.title?.message}</p>
                 <label htmlFor="">Nivel de Conhecimento</label>
-                <select name="" id="" {...register("status")}>
+                <select  id="" {...register("status")}>
                   <option value="Iniciante">Iniciante</option>
                   <option value="Intermediário">Intermediário</option>
                   <option value="Avançado">Avançado</option>

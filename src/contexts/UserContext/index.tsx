@@ -1,12 +1,94 @@
-import { createContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { createContext, ReactNode, useEffect, useState } from "react";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../services/api";
 
-export const UserContext = createContext({});
+export const UserContext = createContext({} as iUserProviderData);
 
-export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState([]);
+interface iWorks {
+  id: string;
+  title: string;
+  description: string;
+  deploy_url: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface iTech {
+  created_at: string;
+  id: string;
+  status: string;
+  title: string;
+  updated_at: string;
+}
+
+interface iUser {
+  bio: string;
+  contact: string;
+  course_module: string;
+  created_at: string;
+  email: string;
+  id: string;
+  name: string;
+  updated_at: string;
+  techs: iTech;
+}
+
+interface iProviderProps {
+  children: ReactNode;
+}
+
+interface iRegisterData {
+  email: string;
+  password: string;
+  name: string;
+  bio: string;
+  contact: string;
+  course_module: string;
+}
+
+export interface iRegisterResponse {
+  id: string;
+  name: string;
+  email: string;
+  course_module: string;
+  bio: string;
+  contact: string;
+  created_at: string;
+  updated_at: string;
+  avatar_url: string | null;
+  techs?: iTech[] | [];
+  works?: iWorks[] | [];
+}
+
+interface iOnSubmit {
+  email: string;
+  password: string;
+}
+
+interface iOnSubmitResponse {
+  user: iRegisterResponse;
+  token: string;
+}
+
+interface iUserProviderData {
+  user: iUser|null;
+  setUser: React.Dispatch<React.SetStateAction<iUser|null>>;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  notification: boolean;
+  setNotification: React.Dispatch<React.SetStateAction<boolean>>;
+  notice: boolean;
+  setNotice: React.Dispatch<React.SetStateAction<boolean>>;
+  navigate: NavigateFunction;
+  registerUser: (data: iRegisterData) => void;
+  onSubmit: (data: iOnSubmit) => void;
+  authenticatedUser: boolean;
+  setauthenticatedUser: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const UserProvider = ({ children }: iProviderProps) => {
+  const [user, setUser] = useState<iUser | null>(null);
   const [authenticatedUser, setauthenticatedUser] = useState(false);
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState(false);
@@ -39,10 +121,9 @@ export const UserProvider = ({ children }) => {
     }
   }, [authenticatedUser]);
 
-  const registerUser = (data) => {
-    console.log(data);
+  const registerUser = (data: iRegisterData) => {
     api
-      .post("/users", data)
+      .post<iRegisterResponse>("/users", data)
 
       .then((resp) => {
         setTimeout(() => {
@@ -67,9 +148,9 @@ export const UserProvider = ({ children }) => {
       });
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: iOnSubmit) => {
     api
-      .post("/sessions", data)
+      .post<iOnSubmitResponse>("/sessions", data)
       .then((resp) => {
         setLoading(true);
         toast("Login feito com Sucesso", {
@@ -85,6 +166,7 @@ export const UserProvider = ({ children }) => {
             .get("/profile")
             .then((response) => {
               setauthenticatedUser(true);
+              console.log(response.data);
               setUser(response.data);
               navigate("/dashboard");
             })
