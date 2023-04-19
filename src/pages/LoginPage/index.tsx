@@ -26,11 +26,7 @@ const LoginPage = () => {
     password: yup.string().required("Senha obrigatória"),
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<iSubmit>({
+  const { register, handleSubmit, formState: { errors },} = useForm<iSubmit>({
     resolver: yupResolver(formSchema),
   });
 

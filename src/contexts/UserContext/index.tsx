@@ -72,8 +72,8 @@ interface iOnSubmitResponse {
 }
 
 interface iUserProviderData {
-  user: iUser|null;
-  setUser: React.Dispatch<React.SetStateAction<iUser|null>>;
+  user: iUser | null;
+  setUser: React.Dispatch<React.SetStateAction<iUser | null>>;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   notification: boolean;
@@ -166,7 +166,6 @@ export const UserProvider = ({ children }: iProviderProps) => {
             .get("/profile")
             .then((response) => {
               setauthenticatedUser(true);
-              console.log(response.data);
               setUser(response.data);
               navigate("/dashboard");
             })

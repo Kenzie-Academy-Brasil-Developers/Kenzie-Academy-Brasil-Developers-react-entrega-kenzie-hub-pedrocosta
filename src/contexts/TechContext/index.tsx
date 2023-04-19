@@ -42,22 +42,26 @@ export const TechProvider = ({ children }: iTechProps) => {
   const [technology, setTechnology] = useState([] as iTecnologyData[]);
   const [loading, setLoading] = useState(false);
   const createTech = (data: iTecnology) => {
-    console.log(data)
+    
     api
-      .post<iTecnologyData>("/users/techs", data)
+      .post<iTecnologyData>("/users/techs",data)
       .then((response) => {
         setLoading(true);
         setTechModal(false);
         setTechnology([...technology, response.data]);
         setLoading(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast("falha ao criar tecnologia", {
+          autoClose: 1000,
+        });
+        console.log(err)});
   };
 
   const deleteTech = (data: iTecnologyData) => {
     api
 
-      .delete(`/users/techs/${data.id}`)
+      .delete(`/users/techs/:${data.id}`)
       .then((response) => {
         setLoading(true);
         const filteredTechnology = technology.filter(
